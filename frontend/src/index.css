@@ -1,0 +1,274 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  FitPath design system, built from the Figma file
+  "Material Dashboard Shadcn - Free Admin Template (Community)".
+  Tokens read from Figma:
+    font        Geist 400/600; xs 12/16, sm 14/20, lg 18/28
+    stone       50 #FAFAF9 | 200 #E7E5E4 | 500 #78716C | 700 #44403C | 800 #292524 | 900 #1C1917
+    body text   #737373 | default border #E5E5E5
+    green       50 #F0FDF4 | 500 #22C55E      blue 500 #3B82F6
+    radius      cards/buttons 8px, main panel 16px
+    primary btn vertical gradient stone-700 -> stone-800, 1px stone-900 border,
+                inner highlights (shadow-3d) + 0 1px 2px drop shadow
+  All colors are RGB channel variables consumed by tailwind.config.js.
+*/
+
+:root {
+  color-scheme: light;
+  --c-ink: 224 221 217;          /* page background  #E0DDD9 (was #F1F1EF) */
+  --c-panel: 241 239 236;        /* main panel       #F1EFEC (was white)   */
+  --c-charcoal: 241 239 236;     /* mobile bar */
+  --c-surface: 255 255 255;      /* cards stay white so they stand out */
+  --c-surfaceHover: 246 245 243;
+  --c-surfaceRaised: 232 229 225;/* chips, tracks    #E8E5E1 */
+  --c-line: 205 200 195;         /* borders          #CDC8C3 (was #E7E5E4) */
+  --c-lineBright: 168 162 156;   /* strong borders   #A8A29C */
+  --c-mist: 87 83 78;            /* secondary text   #57534E */
+  --c-mistLight: 68 64 60;       /* #44403C */
+  --c-bone: 28 25 23;            /* #1C1917 */
+  --c-accent: 22 101 52;         /* green-800 #166534 */
+  --c-accentHover: 20 83 45;     /* green-900 */
+  --c-accentDim: 22 163 74;      /* green-600 for fills */
+  --c-cyan: 30 64 175;           /* blue-800 */
+  --c-amber: 146 64 14;
+  --c-rose: 153 27 27;
+  --c-violet: 91 33 182;
+  --c-amber300: 120 53 15;
+  --c-amber400: 146 64 14;
+  --c-rose300: 127 29 29;
+  --c-rose400: 153 27 27;
+  --radius: 0.5rem;
+}
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    background-color: rgb(var(--c-ink));
+    color: rgb(var(--c-bone));
+    font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Subtle grain like the Figma page background */
+  body {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.28  0 0 0 0 0.26  0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-display {
+    font-family: 'Geist', 'Inter', -apple-system, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-bone));
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgb(var(--c-lineBright)); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-mist)); }
+
+.bg-ambient-mesh { background-image: none; }
+.bg-ambient-dots {
+  background-image: radial-gradient(rgb(var(--c-lineBright)) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Main white panel (Figma "Main": white, stone-200 border, 16px radius) */
+@layer components {
+  .app-main {
+    background: rgb(var(--c-panel));
+    border: 1px solid rgb(var(--c-line));
+    border-radius: 16px;
+  }
+}
+
+/* Cards (Figma: white, stone-200 border, 8px radius, no heavy shadow) */
+.card,
+.card-interactive {
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.08);
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+.card-interactive { cursor: pointer; }
+.card-interactive:hover {
+  transform: translateY(-1px);
+  border-color: rgb(var(--c-lineBright));
+  box-shadow: 0 4px 12px -2px rgba(28, 25, 23, 0.10);
+}
+
+.card-glass {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgb(var(--c-line));
+  border-radius: 12px;
+}
+
+.card-glow-accent { position: relative; overflow: hidden; }
+.card-glow-accent::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgb(var(--c-accentDim));
+}
+
+/* Primary button: Figma "shadow-3d" stone gradient button */
+.btn-primary,
+.nav-active {
+  background: linear-gradient(to bottom, #44403C, #292524);
+  border: 1px solid #1C1917;
+  color: #FAFAF9;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  transition: background 160ms ease, transform 160ms ease;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-primary:hover { background: linear-gradient(to bottom, #57534E, #3A3633); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+/* Outline button (Figma "Filter", "View Report", "Prev/Next") */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
+  color: rgb(var(--c-bone));
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.04);
+  transition: background-color 160ms ease, border-color 160ms ease;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-secondary:hover { background: rgb(var(--c-surfaceHover)); border-color: rgb(var(--c-lineBright)); }
+.btn-secondary:active { transform: translateY(1px); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 36px;
+  background: transparent;
+  color: rgb(var(--c-mistLight));
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  transition: background-color 160ms ease, color 160ms ease;
+  cursor: pointer;
+}
+.btn-ghost:hover { color: rgb(var(--c-bone)); background: rgb(var(--c-surfaceRaised)); }
+
+/* 44px touch targets on touch devices */
+@media (pointer: coarse) {
+  .btn-primary, .btn-secondary, .btn-ghost, .input-base { min-height: 44px; }
+}
+
+/* Progress (Figma: light track, near-black fill) */
+.progress-track {
+  background: rgb(var(--c-surfaceRaised));
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  background: #1C1917;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.progress-fill-amber {
+  background: #B45309;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Form controls */
+.input-base {
+  width: 100%;
+  min-height: 40px;
+  background: #FFFFFF;
+  border: 1px solid rgb(var(--c-lineBright));
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  color: rgb(var(--c-bone));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+  outline: none;
+}
+.input-base::placeholder { color: rgb(var(--c-mist) / 0.8); }
+.input-base:focus {
+  border-color: rgb(var(--c-bone));
+  box-shadow: 0 0 0 3px rgba(28, 25, 23, 0.12);
+}
+
+/* Badges (always paired with text, never color-only).
+   Figma status pill: green-50 background, rounded-full, xs text. */
+.badge-neon,
+.badge-cyan,
+.badge-amber,
+.badge-neutral {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+}
+.badge-neon   { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
+.badge-cyan   { background: #DBEAFE; color: #1E40AF; border: 1px solid #93C5FD; }
+.badge-amber  { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+.badge-neutral {
+  background: rgb(var(--c-surface));
+  color: rgb(var(--c-mistLight));
+  border: 1px solid rgb(var(--c-line));
+}
+
+.text-gradient-accent { color: rgb(var(--c-accent)); }
+.text-gradient-silver { color: rgb(var(--c-bone)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card-interactive:hover, .btn-primary:active, .btn-secondary:active { transform: none; }
+}
