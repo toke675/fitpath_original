@@ -111,7 +111,6 @@ export default function Onboarding() {
     heightCm: "",
     weightKg: "",
     sport: "",
-    noSport: false,
     goals: [],
     customGoal: "",
     experienceLevel: "beginner",
@@ -150,8 +149,8 @@ export default function Onboarding() {
         }
         return null;
       case 1:
-        if (!form.noSport && !form.sport.trim()) {
-          return "Please enter a sport or choose general athletic development.";
+        if (!form.sport.trim()) {
+          return "Please enter your primary sport.";
         }
         return null;
       case 2:
@@ -210,8 +209,8 @@ export default function Onboarding() {
       age: Number(form.age),
       heightCm: Number(form.heightCm),
       weightKg: Number(form.weightKg),
-      sport: form.noSport ? "General Athletic Development" : form.sport,
-      goals: form.noSport ? [...new Set([...goals, "Overall Athleticism"])] : goals,
+      sport: form.sport,
+      goals,
       daysPerWeek: Number(form.daysPerWeek),
       sessionMinutes: Number(form.sessionMinutes),
       busyBlocks: form.hasBusyBlock ? [{ label: form.busyLabel, start: form.busyStart, end: form.busyEnd }] : [],
@@ -375,31 +374,10 @@ export default function Onboarding() {
                 <input
                   className="input-base"
                   value={form.sport}
-                  onChange={(e) => update({ sport: e.target.value, noSport: false })}
+                  onChange={(e) => update({ sport: e.target.value })}
                   placeholder="e.g. Basketball, Soccer, Swimming, Track & Field..."
-                  disabled={form.noSport}
                 />
               </Field>
-
-              <div className="text-center text-xs text-mist my-2">— OR —</div>
-
-              <button
-                type="button"
-                onClick={() => update({ noSport: !form.noSport, sport: "" })}
-                className={`w-full text-left p-5 rounded-2xl border transition-all ${
-                  form.noSport
-                    ? "border-accent bg-accent/10 shadow-glow-sm"
-                    : "border-line bg-surface/60 hover:bg-surface hover:border-lineBright"
-                }`}
-              >
-                <div className="font-display font-bold text-bone text-base mb-1 flex items-center justify-between">
-                  <span>General Athletic Development</span>
-                  {form.noSport && <IconCheck className="w-4 h-4 text-accent" />}
-                </div>
-                <div className="text-xs text-mist leading-relaxed">
-                  I don't specialize in a single sport yet. Build my baseline strength, speed, agility, and injury prevention habits.
-                </div>
-              </button>
             </div>
           )}
 
@@ -667,7 +645,7 @@ export default function Onboarding() {
                 <ReviewRow label="Athlete Name" value={form.name || "—"} />
                 <ReviewRow
                   label="Sport"
-                  value={form.noSport ? "General Athletic Development" : form.sport || "—"}
+                  value={form.sport || "—"}
                   highlight
                 />
                 <ReviewRow

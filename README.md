@@ -108,3 +108,10 @@ treat the safety copy (nutrition, food-scanner framing, training-difficulty
 caps for minors, "not medical advice" language) as a starting point to
 review, not a substitute for real safety/legal review before shipping.
 
+
+## Guided workouts + AI Form Coach
+
+- Every drill shows what to do, how to do it (3 steps), a video guide and timers.
+- Squats, push-ups and planks can be counted and scored by the AI camera (on-device, nothing is uploaded).
+- To play a video inside the app, put a YouTube ID in `videoId` for that drill in `frontend/src/data/exerciseGuides.js`.
+- After pulling these changes run `npm install` in `frontend/` and `npm run prisma:migrate` in `backend/`.

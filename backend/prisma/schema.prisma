@@ -137,6 +137,7 @@ model WorkoutSession {
   durationSec   Int?
   status        String   @default("in_progress") // in_progress | completed | skipped
   perceivedDifficulty String?
+  formScore     Int?     // overall AI Form Coach score 0-100 (null if the camera wasn't used)
   notes         String?
 
   exercises     WorkoutExercise[]
@@ -151,6 +152,8 @@ model WorkoutExercise {
   setsTarget    Int?
   repsCompleted Int?
   repsTarget    Int?
+  heldSec       Int?     // seconds held (plank) as counted by the AI camera
+  formScore     Int?     // AI Form Coach score 0-100 for this exercise
   notes         String?
 }
 

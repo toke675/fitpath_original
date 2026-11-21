@@ -11,9 +11,16 @@ router.post("/start", async (req, res) => {
   res.json(session);
 });
 
+// Optional numbers coming from the AI Form Coach: keep them as whole numbers.
+const toInt = (v) => (Number.isFinite(Number(v)) && v !== null && v !== "" ? Math.round(Number(v)) : undefined);
+const toScore = (v) => {
+  const n = toInt(v);
+  return n === undefined ? undefined : Math.min(100, Math.max(0, n));
+};
+
 router.post("/:id/complete", async (req, res) => {
   const { id } = req.params;
-  const { durationSec, perceivedDifficulty, notes, exercises } = req.body;
+  const { durationSec, perceivedDifficulty, notes, exercises, formScore } = req.body;
   const session = await prisma.workoutSession.update({
     where: { id },
     data: {
@@ -22,6 +29,7 @@ router.post("/:id/complete", async (req, res) => {
       durationSec,
       perceivedDifficulty,
       notes,
+      formScore: toScore(formScore),
       exercises: {
         create: (exercises || []).map((e) => ({
           name: e.name,
@@ -29,6 +37,8 @@ router.post("/:id/complete", async (req, res) => {
           setsTarget: e.setsTarget,
           repsCompleted: e.repsCompleted,
           repsTarget: e.repsTarget,
+          heldSec: toInt(e.heldSec),
+          formScore: toScore(e.formScore),
         })),
       },
     },
